@@ -1,0 +1,91 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Login</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Bus Ticket</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <% if( isAgentAuthentication ){%>
+                <form class="form-inline my-2 my-lg-0" action="/agent/dashboard" method="GET">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-primary mx-2 my-2 my-sm-0" type="submit">Dashboard</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" action="/agent/bus" method="GET">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-success mx-2 my-2 my-sm-0" type="submit">Bus Details</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" action="/agent/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">LogOut</button>
+                </form>
+                <% } else { %>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/agent/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/agent/signup">Signup</a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mt-5 offset-md-3">
+                <span class="anchor" id="formLogin"></span>
+                <% if(errorMessage) {  %>
+                <div class="alert alert-primary" role="alert"><%= errorMessage.msg %></div>
+                <% } %>
+                <div class="card card-outline-secondary">
+                    <div class="card-header">
+                        <h3 class="mb-0">Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form class="form" action="/agent/loginsuccess" role="form" id="loginForm" method="POST">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" <% if(errorMessage) { %>
+                                    value="<%= errorMessage.value %>" <% } %> placeholder="Your Email"
+                                    required="true" />
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" class="form-control" name="pass" placeholder="Your Password"
+                                    required="true">
+                            </div>
+                            <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                            <button type="submit" class="btn btn-success btn-lg float-right"
+                                id="btnLogin">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

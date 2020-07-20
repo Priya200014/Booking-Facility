@@ -1,0 +1,58 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+
+    <%- include('includes/head.ejs') %>
+    <div class="container">
+        <% if( details.length > 0) { %>
+        <div class="row">
+            <% for(let detail of details) { %>
+            <div class="col-md-10 mb-5 mt-5 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <%= detail.data.from %> - <%= detail.data.to %>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Travels : <%= detail.travel %></h5>
+                        <p class="card-text">Pickup Station : <%= detail.data.pickup %></p>
+                        <p class="card-text">Drop Station : <%= detail.data.drop %></p>
+                        <p class="card-text">Departure date and time : <%= detail.data.start_date %> -
+                            <%= detail.data.start_time %></p>
+                        <p class="card-text">Reaching date and time : <%= detail.data.end_date %> -
+                            <%= detail.data.end_time %></p>
+                        <p class="card-text">First Class Ticket : $<%= detail.data.fc_amount %> - Economy Class Ticket :
+                            $<%= detail.data.ec_amount %></p>
+                        <form action="/bus/seat/<%= detail.agent %>/<%= detail.tid %>/<%= detail.id %>" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                            <button type="submit"
+                                class="btn <% if( detail.data.bookedseats.length >= 35 ) {%> btn-danger <% } else {%> btn-success<% } %>"><% if( detail.data.bookedseats.length >= 35 ) {%>
+                                Sold Out <% } else {%> Book Now <% } %></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% } else { %>
+        <h2 style="text-align: center;">No Records</h2>
+        <% } %>
+    </div>
+</body>
+
+</html>

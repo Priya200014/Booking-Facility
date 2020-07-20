@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+    integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous">
+  </script>
+</head>
+<style>
+  .table>tbody>tr>.no-line {
+    border-top: none;
+  }
+
+  .table>thead>tr>.no-line {
+    border-bottom: none;
+  }
+</style>
+
+<body>
+
+  <%- include('includes/head.ejs') %>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mt-5">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Travel Details</strong></h3>
+          </div>
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table table-condensed">
+                <thead>
+                  <tr>
+                    <td><strong>From</strong></td>
+                    <td><strong>To</strong></td>
+                    <td class="text-center"><strong>Passangers</strong></td>
+                    <td><strong>Travels</strong></td>
+                    <td><strong>Contact</strong></td>
+                    <td><strong>Seat Number</strong></td>
+                    <td class="text-center"><strong>Price</strong></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let ticket of tickets ){ if( ticket.passanger > 0 ) { %>
+                  <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                  <tr>
+                    <td><%= ticket.from %></td>
+                    <td><%= ticket.to %></td>
+                    <td class="text-center"><%= ticket.passanger %></td>
+                    <td><%= ticket.travels %></td>
+                    <td><%= ticket.phone %></td>
+                    <td><%= ticket.seat %></td>
+                    <td class="text-center"><%= ticket.price %></td>
+                  </tr>
+                  <%} } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

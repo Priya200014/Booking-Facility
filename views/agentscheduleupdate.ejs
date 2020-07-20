@@ -1,0 +1,203 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css'>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd" crossorigin="anonymous">
+    </script>
+
+    <script>
+        var district_arr = new Array("Chennai", "Coimbatore", "Madurai", "Tiruchirappally", "Dindigul", "Erode",
+            "Cuddalore", "Dharmapuri",
+            "Nagapattinam", "Namakkal", "Perambalur", "Pudukottai", "Ramanathapuram", "Salem", "Sivagangai",
+            "Thanjavur", "Theni", "The Nilgiris", "Thirunelveli",
+            "Thiruvallur", "Thiruvannamalai", "Thiruvarur", "Thoothukudi", "Tiruppur", "Vellore", "Villupuram",
+            "Virudhunagar", "Ariyalur", "Kancheepuram",
+            "Kanniyakumari", "Karur", "Krishnagiri", "Kallakkurichi", "Thenkasi", "Chengalpattu", "Ranipet",
+            "Thirupattur");
+
+        function print_place_from(id) {
+            // given the id of the <select> tag as function argument, it inserts <option> tags
+            var option_str = document.getElementById(id);
+
+            option_str.length = 0;
+            option_str.options[0] = new Option("<%= data.from %>", '');
+            option_str.selectedIndex = 0;
+            for (var i = 0; i < district_arr.length; i++) {
+
+                option_str.options[option_str.length] = new Option(district_arr[i], district_arr[i]);
+            }
+        }
+
+        function print_place_to(id) {
+            // given the id of the <select> tag as function argument, it inserts <option> tags
+            var option_str = document.getElementById(id);
+
+            option_str.length = 0;
+            option_str.options[0] = new Option("<%= data.to %>", '');
+            option_str.selectedIndex = 0;
+            for (var i = 0; i < district_arr.length; i++) {
+
+                option_str.options[option_str.length] = new Option(district_arr[i], district_arr[i]);
+            }
+        }
+    </script>
+</head>
+<style>
+    .table-responsive {
+
+        max-height: 300px;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Bus Ticket</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <% if( isAgentAuthentication ){%>
+                <form class="form-inline my-2 my-lg-0" action="/agent/dashboard" method="GET">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-primary mx-2 my-2 my-sm-0" type="submit">Dashboard</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" action="/agent/bus" method="GET">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-success mx-2 my-2 my-sm-0" type="submit">Bus Details</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" action="/agent/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                    <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">LogOut</button>
+                </form>
+                <% } else { %>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/agent/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/agent/signup">Signup</a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 style="text-align: center;">Agent's Bus Details</h1>
+        <div class="card mb-5 card-outline-secondary">
+            <div class="card-header">
+                <h3 class="mb-0">Update Bus Schedule</h3>
+            </div>
+            <div class="card-body">
+                <form action="/agent/update_data_schedule/<%= tid %>/<%= id %>" method="POST">
+
+                    <div class="form-group">
+                        <label>Bus Name</label>
+                        <input class="form-control" type="text" value="<%= travel %>" name="travel"
+                            placeholder="Enter Bus Name" required="true">
+                    </div>
+
+                    <div class="form-group">
+                        <label>From:</label>
+                        <select class="form-control form-control-lg" value="<%= data.from %>" id="from" name="from"
+                            required="true"></select>
+                        <script type="text/javascript" language="javascript">
+                            print_place_from("from");
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label>To:</label>
+                        <select class="form-control form-control-lg" value="<%= data.to %>" id="to" name="to"
+                            required="true"></select>
+                        <script type="text/javascript" language="javascript">
+                            print_place_to("to");
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label>Pickup Stop</label>
+                        <input type="text" class="form-control" name="pickup" value="<%= data.pickup %>"
+                            placeholder="Enter Pickup Stop" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Dropping Stop</label>
+                        <input type="text" class="form-control" name="drop" value="<%= data.drop %>"
+                            placeholder="Enter Dropping Stop" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="number" class="form-control" name="phone" value="<%= data.phone %>"
+                            placeholder="Enter Contact Number" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Departure Date</label>
+                        <input name="start_date" class="form-control" value="<%= data.start_date %>" id="date"
+                            data-provide="datepicker" placeholder="Enter Departure Date" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Departure Time</label>
+                        <input type="time" class="form-control" name="start_time" value="<%= data.start_time %>"
+                            placeholder="Enter Departure Time" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Reaching Date</label>
+                        <input name="end_date" value="<%= data.end_date %>" class="form-control" id="date1"
+                            data-provide="datepicker" placeholder="Enter Reaching Date" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Reaching Time</label>
+                        <input type="time" class="form-control" name="end_time" value="<%= data.end_time %>"
+                            placeholder="Enter Reaching Time" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Bus Status</label>
+                        <input type="text" class="form-control" name="status" value="<%= data.status %>"
+                            placeholder="Enter Status of bus (Ex: Arrived)" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Frist Class Amount</label>
+                        <input type="number" class="form-control" name="fc_amount" value="<%= data.fc_amount %>"
+                            placeholder="Enter Frist Class Amount" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Economy Class Amount</label>
+                        <input type="number" class="form-control" name="ec_amount" value="<%= data.ec_amount %>"
+                            placeholder="Enter Economy Class Amount" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label>Ac/Non Ac</label>
+                        <input type="text" class="form-control" name="ac" value="<%= data.ac %>"
+                            placeholder="Enter Ac/Non Ac" required="true">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="_csrf" value="<%= csrfTocken %>" />
+                        <button type="submit" class="btn btn-success btn-lg float-right">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js'>
+    </script>
+    <script src="../script.js"></script>
+</body>
+
+</html>
